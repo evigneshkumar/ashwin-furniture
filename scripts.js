@@ -151,9 +151,9 @@ function createDropdown(options, icons = {}) {
 // ... Your existing code ...
 
 // Adding the Download PDF button
-const downloadButton = document.createElement('button');
-downloadButton.textContent = 'Download PDF';
-downloadButton.className = 'download-pdf'; // Adding a class for styling
+// const downloadButton = document.createElement('button');
+// downloadButton.textContent = 'Download PDF';
+// downloadButton.className = 'download-pdf'; // Adding a class for styling
 
 // Adding an event listener for the "Download PDF" button
 /* downloadButton.addEventListener('click', () => {
