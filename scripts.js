@@ -14,6 +14,7 @@ materialSections.forEach(section => {
     const removeRowButton = section.querySelector('.remove-row-btn');
     const tableBody = section.querySelector('tbody');
 
+// add row 
     addRowButton.addEventListener('click', () => {
         const newRow = document.createElement('tr');
 
@@ -69,9 +70,15 @@ materialSections.forEach(section => {
         editPriceButton.addEventListener('click', () => {
             const newPrice = prompt('Enter new price:');
             if (newPrice !== null) {
+                const oldPrice = parseFloat(priceText.textContent);
                 priceText.textContent = newPrice;
+                const newPriceFloat = parseFloat(newPrice);
+                totalPrice = totalPrice - oldPrice + newPriceFloat; // Update total price
+                updateTotalPrice();
             }
         });
+        
+
 
         priceCell.appendChild(priceText);
         priceCell.appendChild(editPriceButton);
@@ -80,6 +87,21 @@ materialSections.forEach(section => {
         const selectedPrice = parseFloat(priceText.textContent);
         totalPrice += selectedPrice;
         updateTotalPrice();
+        
+        // Inside addRowButton.addEventListener
+        const numberCell = document.createElement('td');
+        numberCell.textContent = 1; // Default quantity
+        newRow.appendChild(numberCell);
+
+        quantityDropdown.addEventListener('change', () => {
+            const selectedPrice = parseFloat(priceText.textContent);
+            const selectedQuantity = parseFloat(quantityDropdown.value);
+            totalPrice -= selectedPrice * parseFloat(numberCell.textContent); // Deduct old total price
+            numberCell.textContent = selectedQuantity;
+            totalPrice += selectedPrice * selectedQuantity; // Add the new total price
+            updateTotalPrice();
+        });
+
 
         newRow.appendChild(materialCell);
         newRow.appendChild(quantityCell);
@@ -123,3 +145,42 @@ function createDropdown(options, icons = {}) {
     });
     return dropdown;
 }
+
+// ... Your existing code ...
+
+// ... Your existing code ...
+
+// Adding the Download PDF button
+// const downloadButton = document.createElement('button');
+// downloadButton.textContent = 'Download PDF';
+// downloadButton.className = 'download-pdf'; // Adding a class for styling
+
+// Adding an event listener for the "Download PDF" button
+/* downloadButton.addEventListener('click', () => {
+    const element = document.querySelector('main');
+    console.log="download button clicked";
+    // Using html2pdf to generate the PDF
+    html2pdf()
+        .from(element)
+        .save('Ashwin_Furniture.pdf');
+});
+
+// Inserting the Download PDF button after the main element
+const mainElement = document.querySelector('main');
+mainElement.insertAdjacentElement('afterend', downloadButton);
+
+downloadButton.addEventListener('click', async () => {
+    const element = document.querySelector('main');
+    
+    const pdfBlob = await html2pdf().from(element).outputPdf();
+    const blobUrl = URL.createObjectURL(pdfBlob);
+    
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = 'Ashwin_Furniture.pdf';
+    a.click();
+    
+    // Clean up the blob URL
+    URL.revokeObjectURL(blobUrl);
+});
+ */
