@@ -1,0 +1,214 @@
+
+
+header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+main {
+    padding: 2rem;
+}
+
+.section-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.material-section {
+    margin-bottom: 2rem;
+}
+
+.add-row-btn, .remove-row-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.material-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.material-table th, .material-table td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.material-table th {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.edit-price {
+    cursor: pointer;
+    color: blue;
+}
+
+.total-price {
+    display: block;
+    padding: 0.5rem;
+    text-align: right;
+    margin-top: 1rem;
+    font-size: 50px;
+}
+
+.material-icon {
+    /* Define styles for the icons here */
+    font-family: 'Material Icons'; /* Use an icon font or replace with your preferred method */
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+.icon-handle {
+    content: "\e902"; /* Replace with actual icon code or image */
+}
+
+.icon-hinges {
+    content: "images/hinges.png"; /* Replace with actual icon code or image */
+}
+
+/* Other icon styles */
+
+.icon-handle::before {
+    content: "images/handle.svg"; /* Replace with actual icon code or image */
+}
+
+.icon-hinges::before {
+    content: "\e903"; /* Replace with actual icon code or image */
+}
+
+
+/* table designs*/
+
+
+body{
+    font-family: Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    
+}
+h2{
+    text-align: left;
+    font-size: 18px;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    color: black;
+    padding: 30px 0;
+}
+
+/* Table Styles */
+
+.table-wrapper{
+    margin: 10px 70px 70px;
+    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+}
+
+.fl-table {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    background-color: white;
+}
+
+.fl-table td, .fl-table th {
+    text-align: center;
+    padding: 8px;
+}
+
+.fl-table td {
+    border-right: 1px solid #f8f8f8;
+    font-size: 12px;
+}
+
+.fl-table thead th {
+    color: #ffffff;
+    background: #4FC3A1;
+}
+
+
+.fl-table thead th:nth-child(odd) {
+    color: #ffffff;
+    background: #324960;
+}
+
+.fl-table tr:nth-child(even) {
+    background: #F8F8F8;
+}
+
+/* Responsive */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(140deg, #49a09d, #f0f0ff);
+  font-family: sans-serif;
+  font-weight: 100;
+}
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+table {
+  width: 800px;
+  border-collapse: collapse;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+th,
+td {
+  padding: 15px;
+  background-color: rgba(255,255,255,0.2);
+  color: #00000f;
+}
+
+th {
+  text-align: left;
+}
+
+thead {
+  th {
+    background-color: #55608f;
+  }
+}
+
+tbody {
+  tr {
+    &:hover {
+      background-color: rgba(255,255,255,0.3);
+    }
+  }
+  td {
+    position: relative;
+    &:hover {
+      &:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -9999px;
+        bottom: -9999px;
+        background-color: rgba(255,255,255,0.2);
+        z-index: -1;
+      }
+    }
+  }
+}
