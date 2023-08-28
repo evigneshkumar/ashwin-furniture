@@ -1,4 +1,18 @@
 
+/* Add some basic styling to the download button */
+.download-pdf {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  align-content: right;
+}
+
 
 header {
     background-color: #333;
@@ -212,3 +226,4 @@ tbody {
     }
   }
 }
+
