@@ -56,15 +56,14 @@ materialSections.forEach(section => {
         //base
         const materialType = section.dataset.material;
         const materialDropdown = createDropdown(materialData[materialType].types, materialIcons);
-        const quantityDropdown = createDropdown(materialData[materialType].sizes);
+        const sizeDropDown = createDropdown(materialData[materialType].sizes);
 
         materialCell.appendChild(materialDropdown);
-        quantityCell.appendChild(quantityDropdown);
+        quantityCell.appendChild(sizeDropDown);
 
         const priceSpan = document.createElement('price-span'); // Create priceSpan for displaying price
         priceSpan.textContent = materialData[materialType].prices[0];
         priceCell.appendChild(priceSpan); // Attach priceSpan to priceCell
-
 
         const editPriceButton = document.createElement('span');
         editPriceButton.textContent = '  ✎';
@@ -95,18 +94,15 @@ materialSections.forEach(section => {
         originalPriceInput.type = 'hidden';
         originalPriceInput.value = materialData[materialType].prices[0];
         priceCell.appendChild(originalPriceInput);
-
         priceSpan.textContent = materialData[materialType].prices[0];
         priceCell.appendChild(priceSpan);
         newRow.appendChild(priceCell);
-
 
         // Update the total price
         const selectedPrice = parseFloat(priceSpan.textContent);
         totalPrice += selectedPrice;
         updateTotalPrice();
 
-        
         // Inside addRowButton.addEventListener
         const numberCell = document.createElement('td');
         const quantityWrapper = document.createElement('div');
@@ -116,6 +112,14 @@ materialSections.forEach(section => {
         minusButton.textContent = '-';
         minusButton.addEventListener('click', () => {
             updateQuantity(-1, priceSpan, quantityDisplay); // Pass priceSpan and quantityDisplay
+            const rows = tableBody.querySelectorAll('tr');
+            if (rows.length > 0) {
+                const lastRow = rows[rows.length - 1];
+                const selectedQuantity3 = parseFloat(lastRow.querySelector('td:first-child span').textContent);
+                if(selectedQuantity3==0){
+                    lastRow.remove();
+                }
+            }
         });
 
         const plusButton = document.createElement('button');
@@ -135,16 +139,19 @@ materialSections.forEach(section => {
         newRow.appendChild(numberCell);
 
 
-        quantityDropdown.addEventListener('change', () => {
+        sizeDropDown.addEventListener('change', () => {
             const selectedPrice = parseFloat(priceSpan.textContent); // Use the price for the specific row
-            const selectedQuantity = parseFloat(quantityDropdown.value);
+            console.log(selectedPrice);
+            const selectedQuantity = parseFloat(sizeDropDown.value);
+            console.log(selectedQuantity);
             const oldQuantity = parseFloat(quantityDisplay.textContent);
+            console.log(oldQuantity);
             const priceChange = selectedPrice * (selectedQuantity - oldQuantity);
-        
-            totalPrice += priceChange;
-            updateTotalPrice();
-        
-            quantityDisplay.textContent = selectedQuantity;
+            console.log(priceChange);
+            // totalPrice += priceChange;
+            // updateTotalPrice(); - Why this price change needed  
+                
+            //quantityDisplay.textContent = selectedQuantity;- Why is the line needed to update the quantity when size changes
         });
 
         newRow.appendChild(materialCell);
@@ -160,9 +167,11 @@ materialSections.forEach(section => {
         if (rows.length > 0) {
             const lastRow = rows[rows.length - 1];
             const removedPrice = parseFloat(lastRow.querySelector('td:last-child price-span').textContent);
-            totalPrice -= removedPrice;
+            const selectedQuantity1 = parseFloat(lastRow.querySelector('td:first-child span').textContent);
+            if(selectedQuantity1>=1){
+                totalPrice -= removedPrice;
+            }
             updateTotalPrice();
-
             lastRow.remove();
         }
     });
@@ -191,7 +200,7 @@ function createDropdown(options, icons = {}) {
     return dropdown;
 }
 
-function updateQuantity(change, priceSpan, quantityDisplay,section) {
+function updateQuantity(change, priceSpan, quantityDisplay) {
     const currentQuantity = parseFloat(quantityDisplay.textContent);
     const newQuantity = currentQuantity + change;
     const selectedPrice = parseFloat(priceSpan.textContent); // Use the displayed price, not the hidden input
@@ -201,26 +210,10 @@ function updateQuantity(change, priceSpan, quantityDisplay,section) {
         totalPrice += priceChange;
         updateTotalPrice();
         quantityDisplay.textContent = newQuantity;
-        if(newQuantity == 0){
-            const removeRowButton = section.querySelector('.remove-row-btn');
-            removeRowButton.click()
-            //removeRowsFunction(section);
-        }
+        // if(newQuantity == 0){
+        //     const removeRowButton = section.querySelector('.remove-row-btn');
+        //     removeRowButton.click()
+        //     //removeRowsFunction(section);
+        // }
     }
 }
-
-function removeRowsFunction(section){
-    const tableBody = section.querySelector('tbody');
-    const rows = tableBody.querySelectorAll('tr');
-    if (rows.length > 0) {
-        const lastRow = rows[rows.length - 1];
-        
-        const removedPrice = parseFloat(lastRow.querySelector('td:last-child price-span').textContent);
-        console.log(removedPrice);
-        totalPrice -= removedPrice;
-        updateTotalPrice();
-
-        lastRow.remove();
-    }
-}
-
