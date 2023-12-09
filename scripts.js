@@ -34,12 +34,12 @@ materialSections.forEach(section => {
             adhesive: {
                 types: ['HeatX', 'Fevicol', 'Edge band tape'],
                 sizes: ['1 kg', '1 m'],
-                prices: [250]
+                prices: [250, 10]
             },
             screws: {
                 types: ['Screws', 'Bolts', 'Nails'],
-                sizes: ['2"','2 ½"','3"'],
-                prices: [1000]
+                sizes: ['2"','2.5"','3"'],
+                prices: [1000, 1250, 1500]
             },
             attachments: {
                 types: ['Handle', 'Hinges', 'Runner', 'Lock', 'Mirror', 'Steel Basket'],
@@ -48,7 +48,7 @@ materialSections.forEach(section => {
             },
             mica: {
                 types: ['Inside - 0.8"', 'Outside - 0.8"', 'Inside - 1"', 'Outside - 1"'],
-                sizes: ['8 * 4'],
+                sizes: ['8 * 4', '6 * 3'],
                 prices: [1200,600]
             }
             // Add more material data
@@ -56,10 +56,10 @@ materialSections.forEach(section => {
         //base
         const materialType = section.dataset.material;
         const materialDropdown = createDropdown(materialData[materialType].types, materialIcons);
-        const quantityDropdown = createDropdown(materialData[materialType].sizes);
+        const sizeDropDown = createDropdown(materialData[materialType].sizes);
 
         materialCell.appendChild(materialDropdown);
-        quantityCell.appendChild(quantityDropdown);
+        quantityCell.appendChild(sizeDropDown);
 
         const priceSpan = document.createElement('price-span'); // Create priceSpan for displaying price
         priceSpan.textContent = materialData[materialType].prices[0];
@@ -116,6 +116,14 @@ materialSections.forEach(section => {
         minusButton.textContent = '-';
         minusButton.addEventListener('click', () => {
             updateQuantity(-1, priceSpan, quantityDisplay); // Pass priceSpan and quantityDisplay
+            const rows = tableBody.querySelectorAll('tr');
+            if (rows.length > 0) {
+                const lastRow = rows[rows.length - 1];
+                const selectedQuantity3 = parseFloat(lastRow.querySelector('td:first-child span').textContent);
+                if(selectedQuantity3==0){
+                    lastRow.remove();
+                }
+            }
         });
 
         const plusButton = document.createElement('button');
@@ -135,17 +143,31 @@ materialSections.forEach(section => {
         newRow.appendChild(numberCell);
 
 
-        quantityDropdown.addEventListener('change', () => {
+        sizeDropDown.addEventListener('change', () => {
             const selectedPrice = parseFloat(priceSpan.textContent); // Use the price for the specific row
-            const selectedQuantity = parseFloat(quantityDropdown.value);
+            const selectedQuantity = parseFloat(sizeDropDown.value);
             const oldQuantity = parseFloat(quantityDisplay.textContent);
-            const priceChange = selectedPrice * (selectedQuantity - oldQuantity);
-        
-            totalPrice += priceChange;
+            const oldCharges = selectedPrice * oldQuantity;
+            let selectedIndexOfMaterial;
+            for(let i=0;i<materialData[materialType].sizes.length;i++){
+                let text = materialData[materialType].sizes[i];
+                if(materialType == "screws"){
+                    let updatedScrewSize = selectedQuantity+"\"";
+                 if(text==updatedScrewSize){
+                    selectedIndexOfMaterial = i;
+                 }
+                }else if(text.startsWith(selectedQuantity)){
+                    selectedIndexOfMaterial = i;
+                }
+            }
+            priceSpan.textContent = materialData[materialType].prices[selectedIndexOfMaterial];
+            priceCell.appendChild(priceSpan); 
+            const newlyUpatedPrice = parseFloat(materialData[materialType].prices[selectedIndexOfMaterial]);
+            const newCharges = newlyUpatedPrice * oldQuantity;
+            totalPrice -= oldCharges;
+            totalPrice += newCharges;
             updateTotalPrice();
-        
-            quantityDisplay.textContent = selectedQuantity;
-        });
+    });
 
         newRow.appendChild(materialCell);
         newRow.appendChild(quantityCell);
@@ -160,9 +182,11 @@ materialSections.forEach(section => {
         if (rows.length > 0) {
             const lastRow = rows[rows.length - 1];
             const removedPrice = parseFloat(lastRow.querySelector('td:last-child price-span').textContent);
-            totalPrice -= removedPrice;
+            const selectedQuantity1 = parseFloat(lastRow.querySelector('td:first-child span').textContent);
+            if(selectedQuantity1>=1){
+                totalPrice -= removedPrice;
+            }
             updateTotalPrice();
-
             lastRow.remove();
         }
     });
@@ -191,7 +215,7 @@ function createDropdown(options, icons = {}) {
     return dropdown;
 }
 
-function updateQuantity(change, priceSpan, quantityDisplay,section) {
+function updateQuantity(change, priceSpan, quantityDisplay) {
     const currentQuantity = parseFloat(quantityDisplay.textContent);
     const newQuantity = currentQuantity + change;
     const selectedPrice = parseFloat(priceSpan.textContent); // Use the displayed price, not the hidden input
@@ -201,26 +225,5 @@ function updateQuantity(change, priceSpan, quantityDisplay,section) {
         totalPrice += priceChange;
         updateTotalPrice();
         quantityDisplay.textContent = newQuantity;
-        if(newQuantity == 0){
-            const removeRowButton = section.querySelector('.remove-row-btn');
-            removeRowButton.click()
-            //removeRowsFunction(section);
-        }
     }
 }
-
-function removeRowsFunction(section){
-    const tableBody = section.querySelector('tbody');
-    const rows = tableBody.querySelectorAll('tr');
-    if (rows.length > 0) {
-        const lastRow = rows[rows.length - 1];
-        
-        const removedPrice = parseFloat(lastRow.querySelector('td:last-child price-span').textContent);
-        console.log(removedPrice);
-        totalPrice -= removedPrice;
-        updateTotalPrice();
-
-        lastRow.remove();
-    }
-}
-
