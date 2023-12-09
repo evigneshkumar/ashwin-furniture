@@ -7,7 +7,7 @@ const materialIcons = {
 };
 
 // Initialize the total price
-let totalPrice = 0;
+let totalPrice = 0.00;
 let quantityDisplay; // Declare quantityDisplay globally accessible
 
 materialSections.forEach(section => {
@@ -53,16 +53,7 @@ materialSections.forEach(section => {
             }
             // Add more material data
         };
-
-      
         //base
-
-        
-    
-        
-       
-    
-
         const materialType = section.dataset.material;
         const materialDropdown = createDropdown(materialData[materialType].types, materialIcons);
         const quantityDropdown = createDropdown(materialData[materialType].sizes);
@@ -70,7 +61,7 @@ materialSections.forEach(section => {
         materialCell.appendChild(materialDropdown);
         quantityCell.appendChild(quantityDropdown);
 
-        const priceSpan = document.createElement('span'); // Create priceSpan for displaying price
+        const priceSpan = document.createElement('price-span'); // Create priceSpan for displaying price
         priceSpan.textContent = materialData[materialType].prices[0];
         priceCell.appendChild(priceSpan); // Attach priceSpan to priceCell
 
@@ -100,9 +91,6 @@ materialSections.forEach(section => {
 
         priceCell.appendChild(editPriceButton);
 
-        
-        
-        
         const originalPriceInput = document.createElement('input'); // Hidden input for original price
         originalPriceInput.type = 'hidden';
         originalPriceInput.value = materialData[materialType].prices[0];
@@ -171,8 +159,7 @@ materialSections.forEach(section => {
         const rows = tableBody.querySelectorAll('tr');
         if (rows.length > 0) {
             const lastRow = rows[rows.length - 1];
-            const removedPrice = parseFloat(lastRow.querySelector('td:last-child span').textContent);
-
+            const removedPrice = parseFloat(lastRow.querySelector('td:last-child price-span').textContent);
             totalPrice -= removedPrice;
             updateTotalPrice();
 
@@ -204,21 +191,36 @@ function createDropdown(options, icons = {}) {
     return dropdown;
 }
 
-function updateQuantity(change, priceSpan, quantityDisplay) {
+function updateQuantity(change, priceSpan, quantityDisplay,section) {
     const currentQuantity = parseFloat(quantityDisplay.textContent);
     const newQuantity = currentQuantity + change;
     const selectedPrice = parseFloat(priceSpan.textContent); // Use the displayed price, not the hidden input
 
-    if (newQuantity >= 1) {
+    if (newQuantity >= 0) {
         const priceChange = selectedPrice * change;
         totalPrice += priceChange;
         updateTotalPrice();
-
         quantityDisplay.textContent = newQuantity;
+        if(newQuantity == 0){
+            const removeRowButton = section.querySelector('.remove-row-btn');
+            removeRowButton.click()
+            //removeRowsFunction(section);
+        }
     }
 }
 
+function removeRowsFunction(section){
+    const tableBody = section.querySelector('tbody');
+    const rows = tableBody.querySelectorAll('tr');
+    if (rows.length > 0) {
+        const lastRow = rows[rows.length - 1];
+        
+        const removedPrice = parseFloat(lastRow.querySelector('td:last-child price-span').textContent);
+        console.log(removedPrice);
+        totalPrice -= removedPrice;
+        updateTotalPrice();
 
-
-
+        lastRow.remove();
+    }
+}
 
