@@ -34,12 +34,12 @@ materialSections.forEach(section => {
             adhesive: {
                 types: ['HeatX', 'Fevicol', 'Edge band tape'],
                 sizes: ['1 kg', '1 m'],
-                prices: [250]
+                prices: [250, 10]
             },
             screws: {
                 types: ['Screws', 'Bolts', 'Nails'],
-                sizes: ['2"','2 ½"','3"'],
-                prices: [1000]
+                sizes: ['2"','2.5"','3"'],
+                prices: [1000, 1250, 1500]
             },
             attachments: {
                 types: ['Handle', 'Hinges', 'Runner', 'Lock', 'Mirror', 'Steel Basket'],
@@ -48,7 +48,7 @@ materialSections.forEach(section => {
             },
             mica: {
                 types: ['Inside - 0.8"', 'Outside - 0.8"', 'Inside - 1"', 'Outside - 1"'],
-                sizes: ['8 * 4'],
+                sizes: ['8 * 4', '6 * 3'],
                 prices: [1200,600]
             }
             // Add more material data
@@ -154,6 +154,7 @@ materialSections.forEach(section => {
             //quantityDisplay.textContent = selectedQuantity;- Why is the line needed to update the quantity when size changes
         });
 
+
         newRow.appendChild(materialCell);
         newRow.appendChild(quantityCell);
         newRow.appendChild(priceCell);
@@ -215,5 +216,6 @@ function updateQuantity(change, priceSpan, quantityDisplay) {
         //     removeRowButton.click()
         //     //removeRowsFunction(section);
         // }
+
     }
 }
