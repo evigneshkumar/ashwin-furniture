@@ -170,7 +170,7 @@ materialSections.forEach(section => {
             const removedPrice = parseFloat(lastRow.querySelector('td:last-child price-span').textContent);
             const selectedQuantity1 = parseFloat(lastRow.querySelector('td:first-child span').textContent);
             if(selectedQuantity1>=1){
-                totalPrice -= removedPrice;
+                totalPrice -= removedPrice * selectedQuantity1;
             }
             updateTotalPrice();
             lastRow.remove();
