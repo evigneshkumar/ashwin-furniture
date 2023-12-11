@@ -65,7 +65,6 @@ materialSections.forEach(section => {
         priceSpan.textContent = materialData[materialType].prices[0];
         priceCell.appendChild(priceSpan); // Attach priceSpan to priceCell
 
-
         const editPriceButton = document.createElement('span');
         editPriceButton.textContent = '  ✎';
         editPriceButton.classList.add('edit-price');
@@ -95,18 +94,15 @@ materialSections.forEach(section => {
         originalPriceInput.type = 'hidden';
         originalPriceInput.value = materialData[materialType].prices[0];
         priceCell.appendChild(originalPriceInput);
-
         priceSpan.textContent = materialData[materialType].prices[0];
         priceCell.appendChild(priceSpan);
         newRow.appendChild(priceCell);
-
 
         // Update the total price
         const selectedPrice = parseFloat(priceSpan.textContent);
         totalPrice += selectedPrice;
         updateTotalPrice();
 
-        
         // Inside addRowButton.addEventListener
         const numberCell = document.createElement('td');
         const quantityWrapper = document.createElement('div');
@@ -145,29 +141,19 @@ materialSections.forEach(section => {
 
         sizeDropDown.addEventListener('change', () => {
             const selectedPrice = parseFloat(priceSpan.textContent); // Use the price for the specific row
+            console.log(selectedPrice);
             const selectedQuantity = parseFloat(sizeDropDown.value);
+            console.log(selectedQuantity);
             const oldQuantity = parseFloat(quantityDisplay.textContent);
-            const oldCharges = selectedPrice * oldQuantity;
-            let selectedIndexOfMaterial;
-            for(let i=0;i<materialData[materialType].sizes.length;i++){
-                let text = materialData[materialType].sizes[i];
-                if(materialType == "screws"){
-                    let updatedScrewSize = selectedQuantity+"\"";
-                 if(text==updatedScrewSize){
-                    selectedIndexOfMaterial = i;
-                 }
-                }else if(text.startsWith(selectedQuantity)){
-                    selectedIndexOfMaterial = i;
-                }
-            }
-            priceSpan.textContent = materialData[materialType].prices[selectedIndexOfMaterial];
-            priceCell.appendChild(priceSpan); 
-            const newlyUpatedPrice = parseFloat(materialData[materialType].prices[selectedIndexOfMaterial]);
-            const newCharges = newlyUpatedPrice * oldQuantity;
-            totalPrice -= oldCharges;
-            totalPrice += newCharges;
-            updateTotalPrice();
-    });
+            console.log(oldQuantity);
+            const priceChange = selectedPrice * (selectedQuantity - oldQuantity);
+            console.log(priceChange);
+            // totalPrice += priceChange;
+            // updateTotalPrice(); - Why this price change needed  
+                
+            //quantityDisplay.textContent = selectedQuantity;- Why is the line needed to update the quantity when size changes
+        });
+
 
         newRow.appendChild(materialCell);
         newRow.appendChild(quantityCell);
@@ -184,7 +170,7 @@ materialSections.forEach(section => {
             const removedPrice = parseFloat(lastRow.querySelector('td:last-child price-span').textContent);
             const selectedQuantity1 = parseFloat(lastRow.querySelector('td:first-child span').textContent);
             if(selectedQuantity1>=1){
-                totalPrice -= removedPrice;
+                totalPrice -= removedPrice * selectedQuantity1;
             }
             updateTotalPrice();
             lastRow.remove();
@@ -225,5 +211,11 @@ function updateQuantity(change, priceSpan, quantityDisplay) {
         totalPrice += priceChange;
         updateTotalPrice();
         quantityDisplay.textContent = newQuantity;
+        // if(newQuantity == 0){
+        //     const removeRowButton = section.querySelector('.remove-row-btn');
+        //     removeRowButton.click()
+        //     //removeRowsFunction(section);
+        // }
+
     }
 }
